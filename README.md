@@ -64,193 +64,40 @@ Deployment link:https://joineasy-dashboard.vercel.app/
 ├── public/
 |- package.json
 
-
-## High-Level Architecture:
- ┌─────────────────────────────────────────────────────────────┐
-│                        CLIENT SIDE                          │
-│                      (Next.js 14 App)                       │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                      APP ROUTER (Next.js)                   │
-│  ┌──────────────┐   ┌──────────────┐   ┌──────────────┐   │
-│  │   layout.js  │──▶│   page.js    │──▶│ globals.css  │   │
-│  │  (Root Shell)│   │ (Main Entry) │   │  (Tailwind)  │   │
-│  └──────────────┘   └──────────────┘   └──────────────┘   │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    PRESENTATION LAYER                       │
-│                      (Components)                           │
-│  ┌──────────────┐   ┌──────────────┐   ┌──────────────┐   │
-│  │  LoginPage   │   │   Student    │   │    Admin     │   │
-│  │              │──▶│  Dashboard   │   │  Dashboard   │   │
-│  │  Component   │   │  Component   │   │  Component   │   │
-│  └──────────────┘   └──────────────┘   └──────────────┘   │
-│                              │                              │
-│  ┌──────────────┐   ┌──────────────┐   ┌──────────────┐   │
-│  │   Navbar     │   │   Confirm    │   │   Shared     │   │
-│  │  Component   │   │   Dialog     │   │    UI        │   │
-│  └──────────────┘   └──────────────┘   └──────────────┘   │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                     BUSINESS LOGIC LAYER                    │
-│                      (Hooks & Utils)                        │
-│  ┌──────────────┐   ┌──────────────┐   ┌──────────────┐   │
-│  │   useAuth    │   │  useStorage  │   │ useSubmission│   │
-│  │    Hook      │   │    Hook      │   │     Hook     │   │
-│  └──────────────┘   └──────────────┘   └──────────────┘   │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                      DATA ACCESS LAYER                      │
-│                         (lib/)                              │
-│  ┌──────────────┐   ┌──────────────┐   ┌──────────────┐   │
-│  │  storage.js  │   │ mockData.js  │   │   helpers    │   │
-│  │  (CRUD ops)  │   │(Initial Data)│   │  (Utils)     │   │
-│  └──────────────┘   └──────────────┘   └──────────────┘   │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                      DATA STORAGE                           │
-│                    (Browser Storage)                        │
-│  ┌──────────────┐   ┌──────────────┐   ┌──────────────┐   │
-│  │ localStorage │   │ assignments  │   │  submissions │   │
-│  │  currentUser │   │     data     │   │     data     │   │
-│  └──────────────┘   └──────────────┘   └──────────────┘   │
-└─────────────────────────────────────────────────────────────┘
-
 # Component Hierarchy
 
-App (page.js)
-│
-├─── LoginPage
-│    ├─── Input Fields
-│    └─── Login Button
-│
-├─── StudentDashboard
-│    ├─── Navbar
-│    ├─── Progress Card
-│    ├─── Assignment Grid
-│    │    └─── Assignment Cards (map)
-│    └─── ConfirmDialog (conditional)
-│
-└─── AdminDashboard
-     ├─── Navbar
-     ├─── Assignment List
-     │    └─── Assignment Detail Cards (map)
-     │         ├─── Student Progress Bar
-     │         └─── Student Status List
-     └─── Add Assignment Modal (conditional)
+<img width="793" height="603" alt="image" src="https://github.com/user-attachments/assets/f840fea8-3884-477e-9f6f-4340f8f69fc0" />
+
 
 
 # Data Management Architecture
 
-lib/
-├── storage.js      → localStorage abstraction layer
-│   ├── getAssignments()
-│   ├── saveAssignments()
-│   ├── getSubmissions()
-│   ├── saveSubmissions()
-│   ├── getStoredUser()
-│   ├── saveUser()
-│   └── clearUser()
-│
-└── mockData.js     → Initial data & constants
-    ├── INITIAL_ASSIGNMENTS
-    └── USERS
+<img width="708" height="390" alt="image" src="https://github.com/user-attachments/assets/f6ef4444-384b-415c-bd8e-73424936a69e" />
+
 
 
 # Data Flow Architecture
 
 Authentication Flow
 
-User Input (LoginPage)
-    │
-    ▼
-Validate Credentials (USERS array)
-    │
-    ├─── Valid
-    │    ├─── Save to localStorage
-    │    ├─── Update state
-    │    └─── Route to Dashboard
-    │
-    └─── Invalid
-         └─── Show error message
+<img width="731" height="368" alt="image" src="https://github.com/user-attachments/assets/5678f6a6-130e-4773-947e-70757e8af973" />
+
 
 Student Submission Flow
 
-1. Click "Submit Assignment"
-        │
-        ▼
-2. Show Confirmation Dialog
-        │
-        ▼
-3. User confirms "Yes, I've Submitted"
-        │
-        ▼
-4. Create submission key: "studentId-assignmentId"
-        │
-        ▼
-5. Update submissions object
-        │
-        ▼
-6. Save to localStorage
-        │
-        ▼
-7. Update UI (show checkmark, update progress)
+<img width="756" height="581" alt="image" src="https://github.com/user-attachments/assets/fee5241c-d0b5-4d5e-beaa-bbb0a7eee3fd" />
+
 
 
 Admin Assignment Creation Flow
 
-1. Click "Add Assignment"
-        │
-        ▼
-2. Show Modal Form
-        │
-        ▼
-3. Fill form fields (title, description, date, link)
-        │
-        ▼
-4. Click "Create Assignment"
-        │
-        ▼
-5. Validate all fields filled
-        │
-        ▼
-6. Generate unique ID (timestamp)
-        │
-        ▼
-7. Add to assignments array
-        │
-        ▼
-8. Save to localStorage
-        │
-        ▼
-9. Update UI, close modal
+<img width="759" height="745" alt="image" src="https://github.com/user-attachments/assets/2b49afd8-83c7-4568-9ab3-48d3f216f2ab" />
+
 
 ## Security & Access Control
 
-Role-Based Access Control (RBAC)
-│
-├─── Student Role
-│    ├─── View own assignments
-│    ├─── Submit assignments
-│    ├─── View own progress
-│    └─── Cannot create/delete assignments
-│
-└─── Admin Role
-     ├─── View all assignments
-     ├─── Create new assignments
-     ├─── Delete assignments
-     ├─── View all student submissions
-     └─── Cannot submit assignments
+<img width="641" height="413" alt="image" src="https://github.com/user-attachments/assets/959ef7b1-c122-4201-be5b-2643af947e2d" />
+
 
 
 
